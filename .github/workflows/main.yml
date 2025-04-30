@@ -50,12 +50,6 @@ jobs:
           ssh-keyscan ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
 
       - name: Deploy to production server
-        run: |
-          ssh ${{ secrets.SERVER_BOT }}@${{ secrets.SERVER_IP }} "
-            mkdir -p ~/tomato_portfolio &&
-            cd ~/tomato_portfolio &&
-            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:latest &&
-            docker stop tomato-portfolio || true &&
-            docker rm tomato-portfolio || true &&
-            docker run -d --name tomato-portfolio -p 8000:8000 ${{ secrets.DOCKER_USERNAME }}/${{ env.REPO_NAME }}:latest
-          "
+        run:
+          ssh ${{ secrets.SERVER_BOT }}@${{ secrets.SERVER_IP }} "~/deploy.sh"
+
