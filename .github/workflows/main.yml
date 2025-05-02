@@ -52,4 +52,3 @@ jobs:
       - name: Deploy to production server
         run:
           ssh ${{ secrets.SERVER_BOT }}@${{ secrets.SERVER_IP }} "~/deploy.sh"
-
