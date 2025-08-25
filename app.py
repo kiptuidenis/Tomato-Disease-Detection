@@ -13,8 +13,16 @@ import json
 from werkzeug.utils import secure_filename
 from uuid import uuid4
 
-# Configure logging
-logging.basicConfig(level=logging.DEBUG)
+# Configure logging (level can be overridden by LOG_LEVEL env)
+log_level_name = os.getenv('LOG_LEVEL', 'DEBUG').upper()
+level_map = {
+    'CRITICAL': logging.CRITICAL,
+    'ERROR': logging.ERROR,
+    'WARNING': logging.WARNING,
+    'INFO': logging.INFO,
+    'DEBUG': logging.DEBUG,
+}
+logging.basicConfig(level=level_map.get(log_level_name, logging.DEBUG))
 logger = logging.getLogger(__name__)
 
 # Load environment variables
@@ -51,6 +59,7 @@ logger.debug(f"Mail port: {app.config['MAIL_PORT']}")
 logger.debug(f"Mail username: {app.config['MAIL_USERNAME']}")
 logger.debug(f"Mail password set: {'Yes' if app.config['MAIL_PASSWORD'] else 'No'}")
 
+app.config['MAIL_SUPPRESS_SEND'] = os.getenv('MAIL_SUPPRESS_SEND', 'false').lower() in ('1','true','yes')
 mail = Mail(app)
 
 # Load the trained model
