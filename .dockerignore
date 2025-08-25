@@ -1,0 +1,16 @@
+__pycache__/
+.pytest_cache/
+.venv/
+.env
+example.env
+*.pyc
+*.pyo
+*.pyd
+*.log
+node_modules/
+static/uploads/
+*.ipynb_checkpoints
+*.tflite
+*.h5
+tomato_disease_cnn_model.h5
+
