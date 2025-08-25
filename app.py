@@ -31,6 +31,12 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
+# Non-tomato detection threshold
+try:
+    NON_TOMATO_THRESHOLD = float(os.getenv('NON_TOMATO_THRESHOLD', '0.6'))
+except ValueError:
+    NON_TOMATO_THRESHOLD = 0.6
+
 # Mail configuration
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
@@ -155,6 +161,13 @@ def predict():
                 prediction, confidence = predict_image(opened_img, model)
 
             img_url = url_for('static', filename=f"uploads/{unique_name}")
+            # Non-tomato detection: if explicit 'non_tomato' class predicted OR low confidence
+            is_non_tomato_class = 'non_tomato' in [name.lower() for name in CLASS_NAMES] and prediction.lower() == 'non_tomato'
+            is_low_confidence = confidence < NON_TOMATO_THRESHOLD
+            if is_non_tomato_class or is_low_confidence:
+                flash('Please upload a tomato leaf image. The provided image may not be a tomato leaf.', 'error')
+                return render_template('predict.html', prediction=None, img_path=img_url, non_tomato=True)
+
             return render_template('predict.html', prediction=f'{prediction} (Confidence: {confidence:.2f})', img_path=img_url)
         except Exception as e:
             logger.error(f"Error during prediction: {e}")
