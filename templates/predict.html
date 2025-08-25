@@ -5,6 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tomato Disease Prediction</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        .preview {
+            margin: 1rem auto;
+            max-width: 320px;
+            display: none;
+        }
+        .preview img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .hint {
+            color: #666;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -19,8 +35,12 @@
     <main>
         <section class="prediction-form">
             <h2>Upload an Image to Classify</h2>
-            <form action="/predict" method="post" enctype="multipart/form-data">
-                <input type="file" name="file" accept="image/*" required>
+            <form action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data">
+                <input id="fileInput" type="file" name="file" accept="image/*" required>
+                <div id="preview" class="preview">
+                    <img id="previewImg" src="#" alt="Preview" />
+                </div>
+                <p class="hint">Supported: jpg, jpeg, png, webp. Max 5MB.</p>
                 <button type="submit">Predict</button>
             </form>
             {% if prediction %}
@@ -34,5 +54,22 @@
     <footer>
         <p>&copy; 2024 Tomato Disease Detection</p>
     </footer>
+    <script>
+        const input = document.getElementById('fileInput');
+        const preview = document.getElementById('preview');
+        const previewImg = document.getElementById('previewImg');
+        input.addEventListener('change', (e) => {
+            const file = e.target.files && e.target.files[0];
+            if (!file) { preview.style.display = 'none'; return; }
+            const allowed = ['image/jpeg','image/jpg','image/png','image/webp'];
+            if (!allowed.includes(file.type)) { preview.style.display = 'none'; return; }
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                previewImg.src = ev.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        });
+    </script>
 </body>
 </html>

@@ -6,10 +6,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tomato Portfolio</title>
-    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/theme.css">
-    <script src="/static/theme.js" defer></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='theme.css') }}">
+    <script src="{{ url_for('static', filename='theme.js') }}" defer></script>
 </head>
 <body>
     <div class="background">
@@ -27,7 +27,7 @@
             <section class="fade-in">
                 <h2>About the Project</h2>
                 <p>This is a portfolio website for our agricultural data science project focusing on tomatoes.</p>
-                <a href="https://play.google.com/store/apps/details?id=com.example.tomatoapp" target="_blank">
+                <a href="{{ url_for('predict') }}">
                     <button class="try-app-button">
                         Try App <span class="arrow">→</span>
                     </button>
