@@ -76,7 +76,7 @@ except Exception as e:
     logger.error(f"Error loading model: {e}")
     model = None
 
-# Define class names (ensure this matches your model's training)
+# Define class names (ensure this matches your model's training) 
 # Attempt to load from class_names.json if available to avoid drift
 DEFAULT_CLASS_NAMES = [
     'Tomato___Bacterial_spot',
@@ -179,9 +179,9 @@ def predict():
 
             return render_template('predict.html', prediction=f'{prediction} (Confidence: {confidence:.2f})', img_path=img_url)
         except Exception as e:
-            logger.error(f"Error during prediction: {e}")
-            flash('An error occurred during prediction.', 'error')
-            return redirect(url_for('predict'))
+                logger.error(f"Error during prediction: {e}")
+                flash('An error occurred during prediction.', 'error')
+                return redirect(url_for('predict'))
 
     return render_template("predict.html", prediction=None)
 
