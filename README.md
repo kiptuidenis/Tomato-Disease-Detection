@@ -39,8 +39,6 @@ docker compose up --build
 ```
 App available at http://localhost:8000
 
-Environment variables can be supplied via your shell or an `.env` file (see `example.env`).
-
 ### Endpoints
 
 - `/predict` (GET/POST): upload an image and get disease prediction.
